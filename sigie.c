@@ -33,13 +33,13 @@ struct sigie_buffer *sigie_buffer_create(void)
 
 	buff = malloc(sizeof(*buff));
 	if (!buff) {
-		perror("Cannot allocate new sigie buffer.\n");
+		perror("[error] Cannot allocate new sigie buffer");
 		return NULL;
 	}
 
 	buff->data = malloc(SIGIE_BUFFER_ALLOC_GRANULARITY);
 	if (!buff->data) {
-		perror("Cannot allocate sigie buffer storage.\n");
+		perror("[errror] Cannot allocate sigie buffer storage");
 		free(buff);
 		return NULL;
 	}
@@ -63,7 +63,7 @@ int sigie_buffer_extend(struct sigie_buffer *buff, size_t needed_bytes)
 
 	relocated_data = realloc(buff->data, needed_bytes);
 	if (!relocated_data) {
-		perror("Cannot relocate sigie buffer data.\n");
+		perror("[error] Cannot relocate sigie buffer data");
 		return -1;
 	}
 
@@ -142,7 +142,7 @@ int sigie_accept(struct sigie_connection *conn)
 
 	io_sock_fd = accept(conn->sock_fd, (struct sockaddr *) NULL, NULL);
 	if (-1 == io_sock_fd)
-		perror("Cannot accept incoming connection.\n");
+		perror("[error] Cannot accept incoming connection");
 
 	return io_sock_fd;
 }
@@ -159,7 +159,7 @@ int sigie_read(int io_sock_fd, char *buffer, size_t bytes_to_read)
 	while (bytes_to_read) {
 		read_bytes = read(io_sock_fd, buffer, bytes_to_read);
 		if (-1 == read_bytes) {
-			perror("Cannot read bytes from IO socket.\n");
+			perror("[error] Cannot read bytes from IO socket");
 			return -1;
 		}
 
@@ -176,7 +176,7 @@ int sigie_write(int io_sock_fd, char *buffer, size_t bytes_to_write)
 	while (bytes_to_write) {
 		written_bytes = write(io_sock_fd, buffer, bytes_to_write);
 		if (-1 == written_bytes) {
-			perror("Cannot read bytes from IO socket.\n");
+			perror("[error] Cannot read bytes from IO socket");
 			return -1;
 		}
 
