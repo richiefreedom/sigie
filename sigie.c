@@ -203,7 +203,7 @@ int sigie_receive(int io_sock_fd, struct sigie_buffer *buff)
 
 	netstring_length = strtol(buff->data, &end_ptr, 10);
 	if (*end_ptr != ':') {
-		fprintf(stderr, "Error: incorrect netstring length.\n");
+		fprintf(stderr, "[error] Incorrect netstring length\n");
 		return -1;
 	}
 
@@ -225,8 +225,8 @@ int sigie_receive(int io_sock_fd, struct sigie_buffer *buff)
 	read_bytes += bytes_to_read;
 
 	if (read_bytes != num_len + netstring_length) {
-		fprintf(stderr, "Error: internal inconsitence.\n");
-		fprintf(stderr, "%lu != %lu.\n", read_bytes,
+		fprintf(stderr, "[error] Internal inconsitence\n");
+		fprintf(stderr, "\t%lu != %lu\n", read_bytes,
 			num_len + netstring_length);
 	}
 
@@ -249,7 +249,7 @@ void sigie_print_variables(struct sigie_buffer *buff)
 		next_variable += var_length + 1;
 
 		if (next_variable >= max_data_ptr) {
-			fprintf(stderr, "Error: incorrect sigie input.\n");
+			fprintf(stderr, "[error] Incorrect sigie input\n");
 			abort();
 		}
 
@@ -276,7 +276,7 @@ char *sigie_get_variable(struct sigie_buffer *buff, char *name)
 		next_variable += var_length + 1;
 
 		if (next_variable >= max_data_ptr) {
-			fprintf(stderr, "Error: incorrect sigie input.\n");
+			fprintf(stderr, "[error] Incorrect sigie input\n");
 			abort();
 		}
 
@@ -299,14 +299,14 @@ int sigie_receive_content(int io_sock_fd, struct sigie_buffer *buff)
 
 	variable = sigie_get_variable(buff, "CONTENT_LENGTH");
 	if (!variable) {
-		fprintf(stderr, "Error: cannot obtain content length.\n");
+		fprintf(stderr, "[error] Cannot obtain content length\n");
 		return -1;
 	}
 
 	content_length = strtol(variable, &end_ptr, 10);
 	if (*end_ptr != '\0') {
-		fprintf(stderr, "Error: incorrect content length.\n");
-		fprintf(stderr, "end_ptr points to %s.\n", end_ptr);
+		fprintf(stderr, "[error] Incorrect content length\n");
+		fprintf(stderr, "\tend_ptr points to %s\n", end_ptr);
 		return -1;
 	}
 
