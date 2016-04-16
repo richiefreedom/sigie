@@ -61,6 +61,11 @@ int sigie_buffer_extend(struct sigie_buffer *buff, size_t needed_bytes)
 	rest = needed_bytes % SIGIE_BUFFER_ALLOC_GRANULARITY;
 	needed_bytes += rest;
 
+	if (needed_bytes >= SIGIE_BUFFER_ALLOC_MAX) {
+		fprintf(stderr, "[error] Library uses too much memory\n");
+		return -1;
+	}
+
 	relocated_data = realloc(buff->data, needed_bytes);
 	if (!relocated_data) {
 		perror("[error] Cannot relocate sigie buffer data");
