@@ -91,17 +91,16 @@ struct sigie_connection *sigie_connection_create(uint16_t port)
 
 	conn = malloc(sizeof(*conn));
 	if (!conn) {
-		perror("Cannot alloc new sigie connection.\n");
-		return NULL;
+		perror("[error] Cannot alloc new sigie connection");
+		goto error;
 	}
 
 	memset(conn, 0, sizeof(*conn));
 
 	conn->sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (-1 == conn->sock_fd) {
-		perror("Cannot create server socket.\n");
-		free(conn);
-		return NULL;
+		perror("[error] Cannot create server socket");
+		goto error_free_conn;
 	}
 
 	conn->sock_address.sin_family = AF_INET;
@@ -111,19 +110,24 @@ struct sigie_connection *sigie_connection_create(uint16_t port)
 	ret = bind(conn->sock_fd, (struct sockaddr *) &conn->sock_address,
 		sizeof(conn->sock_address));
 	if (-1 == ret) {
-		perror("Cannot bind the server socket.\n");
-		free(conn);
-		return NULL;
+		perror("[error] Cannot bind the server socket");
+		goto error_close_fd;
 	}
 
 	ret = listen(conn->sock_fd, SIGIE_BACKLOG);
 	if (-1 == ret) {
-		perror("Cannot start to listen on the server socket.\n");
-		free(conn);
-		return NULL;
+		perror("[error] Cannot start to listen on the server socket");
+		goto error_close_fd;
 	}
 
 	return conn;
+
+error_close_fd:
+	close(conn->sock_fd);
+error_free_conn:
+	free(conn);
+error:
+	return NULL;
 }
 
 void sigie_connection_destroy(struct sigie_connection *conn)
