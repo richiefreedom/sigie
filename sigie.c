@@ -79,6 +79,11 @@ void sigie_buffer_destroy(struct sigie_buffer *buff)
 	free(buff);
 }
 
+char *sigie_buffer_get_content(struct sigie_buffer *buff)
+{
+	return buff->content;
+}
+
 struct sigie_connection *sigie_connection_create(uint16_t port)
 {
 	struct sigie_connection *conn;

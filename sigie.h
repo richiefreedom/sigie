@@ -6,6 +6,7 @@
 struct sigie_buffer *sigie_buffer_create(void);
 int sigie_buffer_extend(struct sigie_buffer *buff, size_t needed_bytes);
 void sigie_buffer_destroy(struct sigie_buffer *buff);
+char *sigie_buffer_get_content(struct sigie_buffer *buff);
 
 struct sigie_connection *sigie_connection_create(uint16_t port);
 void sigie_connection_destroy(struct sigie_connection *conn);
