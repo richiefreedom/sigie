@@ -46,6 +46,7 @@ struct sigie_buffer *sigie_buffer_create(void)
 
 	buff->allocated_bytes = SIGIE_BUFFER_ALLOC_GRANULARITY;
 	buff->used_bytes = 0;
+	buff->content = NULL;
 
 	return buff;
 }
@@ -242,7 +243,7 @@ int sigie_receive(int io_sock_fd, struct sigie_buffer *buff)
 
 void sigie_print_variables(struct sigie_buffer *buff)
 {
-	char *max_data_ptr = buff->data + buff->used_bytes;
+	char *max_data_ptr = buff->content - 1;
 	char *next_variable = buff->variables;
 
 	while (next_variable < max_data_ptr) {
@@ -267,7 +268,8 @@ void sigie_print_variables(struct sigie_buffer *buff)
 
 char *sigie_get_variable(struct sigie_buffer *buff, char *name)
 {
-	char *max_data_ptr = buff->data + buff->used_bytes;
+	char *max_data_ptr = (buff->content) ? (buff->content - 1) :
+		buff->data + buff->used_bytes;
 	char *next_variable = buff->variables;
 
 	while (next_variable < max_data_ptr) {
