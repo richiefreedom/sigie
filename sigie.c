@@ -60,7 +60,7 @@ int sigie_buffer_extend(struct sigie_buffer *buff, size_t needed_bytes)
 		return 0;
 
 	rest = needed_bytes % SIGIE_BUFFER_ALLOC_GRANULARITY;
-	needed_bytes += rest;
+	needed_bytes += SIGIE_BUFFER_ALLOC_GRANULARITY - rest;
 
 	if (needed_bytes >= SIGIE_BUFFER_ALLOC_MAX) {
 		fprintf(stderr, "[error] Library uses too much memory\n");
