@@ -67,12 +67,20 @@ int sigie_buffer_extend(struct sigie_buffer *buff, size_t needed_bytes)
 		return -1;
 	}
 
-	relocated_data = realloc(buff->data, needed_bytes);
+	relocated_data = malloc(needed_bytes);
 	if (!relocated_data) {
 		perror("[error] Cannot relocate sigie buffer data");
 		return -1;
 	}
 
+	memcpy(relocated_data, buff->data, buff->allocated_bytes);
+
+	buff->variables = relocated_data + (buff->variables - buff->data);
+	if (buff->content) {
+		buff->content = relocated_data + (buff->content - buff->data);
+	}
+
+	free(buff->data);
 	buff->data = relocated_data;
 	buff->allocated_bytes = needed_bytes;
 
