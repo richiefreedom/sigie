@@ -251,7 +251,8 @@ int sigie_receive(int io_sock_fd, struct sigie_buffer *buff)
 
 void sigie_print_variables(struct sigie_buffer *buff)
 {
-	char *max_data_ptr = buff->content - 1;
+	char *max_data_ptr = (buff->content) ? (buff->content - 1) :
+		buff->data + buff->used_bytes;
 	char *next_variable = buff->variables;
 
 	while (next_variable < max_data_ptr) {
